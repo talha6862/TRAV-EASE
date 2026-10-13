@@ -20,7 +20,7 @@ export default function Customized() {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/admin/destinations`);
+        const res = await fetch("http://localhost:8001/admin/destinations");
         const data = await res.json();
         setDestinationsList(data);
       } catch (err) {
@@ -111,7 +111,7 @@ export default function Customized() {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/travel-preferences`,
+        "http://localhost:8001/api/travel-preferences",
         {
           method: "POST",
           headers: {

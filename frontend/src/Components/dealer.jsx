@@ -82,7 +82,7 @@ if (!formData.maxPrice || isNaN(formData.maxPrice)) newErrors.maxPrice = 'Valid 
     });
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/dealers`, {
+      const response = await fetch('http://localhost:8001/dealers', {
         method: 'POST',
         body: formDataToSend,
       });
