@@ -210,7 +210,7 @@ const handleSubmit = async () => {
       <CardGrid>
         {destinations.map((d) => (
           <Card key={d._id} className="card" onClick={() => handleCardClick(d)}>
-            <img src={`http://localhost:8001/${d.image}`} alt={d.name} />
+            <img src={`${process.env.REACT_APP_API_URL}/${d.image}`} alt={d.name} />
             <h3>{d.name}</h3>
             <p>{d.description}</p>
             <small><strong>Price:</strong> {d.price}</small><br />

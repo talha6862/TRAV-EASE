@@ -35,7 +35,7 @@ const AdminUserItinerary = () => {
       <CardGrid>
         {trips.map(trip => (
           <Card key={trip._id}>
-            <img src={`http://localhost:8001/${trip.image}`} alt={trip.name} />
+            <img src={`${process.env.REACT_APP_API_URL}/${trip.image}`} alt={trip.name} />
             <h3>{trip.name}</h3>
             <p><strong>Email:</strong> {trip.email}</p>
             <p><strong>Destination:</strong> {trip.destination}</p>

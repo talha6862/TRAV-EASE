@@ -56,7 +56,7 @@ export default function Recommend() {
             onClick={() => handleCardClick(destination)}
           >
             <img
-              src={`http://localhost:8001/${destination.image}`}
+              src={`${process.env.REACT_APP_API_URL}/${destination.image}`}
               alt={destination.name}
             />
             <h3>{destination.name}</h3>

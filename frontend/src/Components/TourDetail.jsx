@@ -22,7 +22,7 @@ const TourDetail = () => {
       <Card>
         <ImageWrapper>
           <img
-            src={`http://localhost:8001/${tour.destinationImage}`}
+            src={`${process.env.REACT_APP_API_URL}/${tour.destinationImage}`}
             alt={tour.destinationName}
           />
         </ImageWrapper>

@@ -46,7 +46,7 @@ const TourOperatorDetail = () => {
   return (
     <Wrapper>
       <Card>
-        <img src={`http://localhost:8001/${operator.destinationImage}`} alt="destination" />
+        <img src={`${process.env.REACT_APP_API_URL}/${operator.destinationImage}`} alt="destination" />
         <h2>{operator.operatorName}</h2>
         <p><strong>Company:</strong> {operator.company}</p>
         <p><strong>Email:</strong> {operator.email}</p>

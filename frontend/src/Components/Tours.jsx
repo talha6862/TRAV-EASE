@@ -10,7 +10,7 @@ const Tours = () => {
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        const res = await api.get("http://localhost:8001/api/tour-operators/all");
+        const res = await api.get(`${process.env.REACT_APP_API_URL}/api/tour-operators/all`);
         setTours(res.data); 
       } catch (err) {
         console.error("Failed to fetch tours:", err);
@@ -35,7 +35,7 @@ const Tours = () => {
           {tours.map((tour) => (
           <TourCard key={tour._id} onClick={() => navigate("/tour-detail", { state: tour })}>
   <img
-    src={`http://localhost:8001/${tour.destinationImage}`}
+    src={`${process.env.REACT_APP_API_URL}/${tour.destinationImage}`}
     alt={tour.destinationName}
   />
   <h3>{tour.destinationName}</h3>

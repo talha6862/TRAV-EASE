@@ -14,7 +14,7 @@ const DealerDetail = () => {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const res = await fetch('http://localhost:8001/admin/destinations');
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/admin/destinations`);
         const data = await res.json();
         setDestinations(data);
       } catch (err) {

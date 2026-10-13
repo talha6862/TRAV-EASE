@@ -23,7 +23,7 @@ const PaymentPage = () => {
     totalPrice,
   } = data;
 
-  const imageUrl = `http://localhost:8001/${destinationImage}`;
+  const imageUrl = `${process.env.REACT_APP_API_URL}/${destinationImage}`;
   const totalTourists = Object.entries(touristCounts || {})
     .map(([type, count]) => `${count} ${type}`)
     .filter(s => !s.startsWith("0"))

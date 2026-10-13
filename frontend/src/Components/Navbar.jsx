@@ -123,10 +123,14 @@ const Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 0.8rem 2rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
+  background: linear-gradient(145deg, rgba(6, 36, 43, 0.62), rgba(6, 36, 43, 0.42));
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px -12px rgba(6, 36, 43, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   position: sticky;
   top: 1rem;
   z-index: 10000;

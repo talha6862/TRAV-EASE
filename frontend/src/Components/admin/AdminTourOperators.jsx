@@ -29,7 +29,7 @@ const AdminTourOperators = () => {
             onClick={() => navigate(`/admin/tour-op-detail/${operator._id}`)}
           >
             <img
-              src={`http://localhost:8001/${operator.destinationImage}`}
+              src={`${process.env.REACT_APP_API_URL}/${operator.destinationImage}`}
               alt="destination"
               onError={(e) => {
                 e.target.onerror = null;

@@ -15,7 +15,7 @@ const RentACar = () => {
 
   const fetchDealers = async () => {
     try {
-      const response = await fetch('http://localhost:8001/dealers');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/dealers`);
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);

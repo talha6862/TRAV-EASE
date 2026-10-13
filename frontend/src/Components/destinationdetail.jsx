@@ -29,7 +29,7 @@ export default function DestinationDetail() {
   return (
     <Container>
       <ImageWrapper>
-        <img src={`http://localhost:8001/${image}`} alt={name} />
+        <img src={`${process.env.REACT_APP_API_URL}/${image}`} alt={name} />
       </ImageWrapper>
       <Content>
         <h1>{name}</h1>

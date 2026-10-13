@@ -76,17 +76,17 @@ export default function CompanyDetail() {
         <ImagePreview>
           <div>
             <img
-              src={`http://localhost:8001/uploads/${company.registrationCertificate}`}
+              src={`${process.env.REACT_APP_API_URL}/uploads/${company.registrationCertificate}`}
               alt="Registration Certificate"
-              onClick={() => openModal(`http://localhost:8001/uploads/${company.registrationCertificate}`, "Registration Certificate")}
+              onClick={() => openModal(`${process.env.REACT_APP_API_URL}/uploads/${company.registrationCertificate}`, "Registration Certificate")}
             />
             <Caption>Registration Certificate</Caption>
           </div>
           <div>
             <img
-              src={`http://localhost:8001/uploads/${company.nationalId}`}
+              src={`${process.env.REACT_APP_API_URL}/uploads/${company.nationalId}`}
               alt="National ID"
-              onClick={() => openModal(`http://localhost:8001/uploads/${company.nationalId}`, "National ID")}
+              onClick={() => openModal(`${process.env.REACT_APP_API_URL}/uploads/${company.nationalId}`, "National ID")}
             />
             <Caption>National ID</Caption>
           </div>

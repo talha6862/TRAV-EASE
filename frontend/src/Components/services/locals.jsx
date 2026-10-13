@@ -13,7 +13,7 @@ const Local = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await fetch('http://localhost:8001/api/companies');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/companies`);
         const data = await response.json();
         if (response.ok) {
           const verifiedCompanies = data.filter(c => c.isVerified);

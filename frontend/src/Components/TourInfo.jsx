@@ -29,7 +29,7 @@ const TourInfoPage = () => {
 
   return (
     <Wrapper>
-      <Image src={`http://localhost:8001/${tour.destinationImage}`} alt={tour.destinationName} />
+      <Image src={`${process.env.REACT_APP_API_URL}/${tour.destinationImage}`} alt={tour.destinationName} />
 
       <Content>
         <h1>{tour.destinationName}</h1>

@@ -64,17 +64,17 @@ const DealerDetail = () => {
       <ImageGroup>
         <ImageWrapper>
           <img
-            src={`http://localhost:8001/${dealer.licenseImage}`}
+            src={`${process.env.REACT_APP_API_URL}/${dealer.licenseImage}`}
             alt="License"
-            onClick={() => openZoom(`http://localhost:8001/${dealer.licenseImage}`)}
+            onClick={() => openZoom(`${process.env.REACT_APP_API_URL}/${dealer.licenseImage}`)}
           />
           <Caption>License Image</Caption>
         </ImageWrapper>
         <ImageWrapper>
           <img
-            src={`http://localhost:8001/${dealer.dealershipCertificate}`}
+            src={`${process.env.REACT_APP_API_URL}/${dealer.dealershipCertificate}`}
             alt="Certificate"
-            onClick={() => openZoom(`http://localhost:8001/${dealer.dealershipCertificate}`)}
+            onClick={() => openZoom(`${process.env.REACT_APP_API_URL}/${dealer.dealershipCertificate}`)}
           />
           <Caption>Dealership Certificate</Caption>
         </ImageWrapper>
