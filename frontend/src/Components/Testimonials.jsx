@@ -61,8 +61,7 @@ const Section = styled.section`
     h2 {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #ffffff;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      color: #0d2a31;
     }
   }
 

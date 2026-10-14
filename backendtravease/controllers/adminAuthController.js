@@ -1,15 +1,8 @@
 import Admin from "../models/Admin.js";
 import bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
-
+import transporter from '../utils/mailer.js';
 // Setup reusable transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "talhaaslam6862@gmail.com",
-    pass: "rdtcqdlwnyshilcd",
-  },
-});
+
 
 export const registerAdmin = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -27,14 +20,14 @@ export const registerAdmin = async (req, res) => {
     // Notify the developer
     await transporter.sendMail({
       from: email,
-      to: "talhaaslam6862@gmail.com",
+      to: process.env.ADMIN_NOTIFY_EMAIL || process.env.EMAIL_USER,
       subject: "New Admin Registration Request",
       text: `Admin ${firstName} ${lastName} (${email}) has requested access to TravEase.`,
     });
 
     // Acknowledge the user
     await transporter.sendMail({
-      from: "talhaaslam6862@gmail.com",
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "TravEase Admin Request Received",
       text: `Dear ${firstName},\n\nYour request to become an admin on TravEase.pk has been received.\n\nOur team will review and approve your account shortly.\n\nThank you,\nTravEase Team`
@@ -59,7 +52,7 @@ export const approveAdmin = async (req, res) => {
     }
 
     const mailOptions = {
-      from: "talhaaslam6862@gmail.com",
+      from: process.env.EMAIL_USER,
       to: approved.email,
       subject: "You are now an Admin of TravEase.pk",
       text: `Dear ${approved.firstName} ${approved.lastName},\n\nCongratulations! You have been approved as an admin on TravEase.pk.\n\nYou can now log in and access the admin panel at: https://travease.pk/adminlogin\n\nThank you,\nTravEase Team`,
@@ -79,13 +72,13 @@ export const getAllAdmins = async (req, res) => {
 };
 
 export const loginAdmin = async (req, res) => {
-  const SUPER_ADMIN_EMAIL = "talhaaslam6862@gmail.com";
-  const SUPER_ADMIN_PASSWORD = "talha2024";
+  const SUPER_ADMIN_EMAIL = (process.env.SUPER_ADMIN_EMAIL || "").toLowerCase();
+  const SUPER_ADMIN_PASSWORD = process.env.SUPER_ADMIN_PASSWORD || "";
   const { email, password } = req.body;
 
   try {
     // Super admin login (hardcoded)
-    if (email === SUPER_ADMIN_EMAIL) {
+    if (SUPER_ADMIN_EMAIL && String(email || "").trim().toLowerCase() === SUPER_ADMIN_EMAIL) {
       if (password === SUPER_ADMIN_PASSWORD) {
         return res.status(200).json({
           success: true,

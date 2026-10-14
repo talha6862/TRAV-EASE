@@ -44,14 +44,14 @@ const TourPaymentProceed = () => {
         const selectedRes = await axios.get("https://api.opencagedata.com/geocode/v1/json", {
           params: {
             q: `${selectedCity}, Pakistan`,
-            key: 'cccb5f5f8a92443a98d1cc24eb5b3a35',
+            key: process.env.REACT_APP_OPENCAGE_KEY,
           },
         });
 
         const destinationRes = await axios.get("https://api.opencagedata.com/geocode/v1/json", {
           params: {
             q: `${tour.destinationName}, Pakistan`,
-            key: 'cccb5f5f8a92443a98d1cc24eb5b3a35',
+            key: process.env.REACT_APP_OPENCAGE_KEY,
           },
         });
 

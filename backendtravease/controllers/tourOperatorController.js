@@ -1,14 +1,9 @@
 import TourOperator from "../models/tourOperatorModel.js";
 import Destination from "../models/Destination.js";
-import nodemailer from "nodemailer";
+import { webPath } from '../utils/multer.js';
+import transporter from '../utils/mailer.js';
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-      user: "talhaaslam6862@gmail.com",
-        pass: "rdtcqdlwnyshilcd", 
-  },
-});
+
 
 
 export const registerTourOperator = async (req, res) => {
@@ -31,7 +26,7 @@ export const registerTourOperator = async (req, res) => {
       departures
     } = req.body;
 
-    const imagePath = req.file ? req.file.path : null;
+    const imagePath = req.file ? webPath(req.file) : null;
 
     const parsedTouristSpots = JSON.parse(touristSpots || "[]");
     const parsedVehicleTypes = JSON.parse(vehicleTypes || "[]");
@@ -68,7 +63,7 @@ export const registerTourOperator = async (req, res) => {
     await newOperator.save();
 
     await transporter.sendMail({
-      from: "talhaaslam6862@gmail.com",
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "Tour Operator Registration Received - Pending Approval",
       html: `

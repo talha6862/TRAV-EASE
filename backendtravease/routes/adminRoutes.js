@@ -1,4 +1,5 @@
 import express from 'express';
+import upload from '../utils/multer.js';
 import {
   getAllDealers,
   approveDealer,
@@ -20,14 +21,6 @@ import {
   getAllFeedbacks,
   deleteFeedback
 } from '../controllers/adminController.js';
-
-import multer from 'multer'; 
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
-});
-const upload = multer({ storage });
 
 const router = express.Router();
 

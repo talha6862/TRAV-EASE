@@ -1,19 +1,8 @@
 import express from 'express';
-import multer from 'multer';
+import upload from '../utils/multer.js';
 import { registerCompany, getCompanies } from '../controllers/companyController.js';
 
 const router = express.Router();
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueName = Date.now() + '-' + file.originalname;
-    cb(null, uniqueName);
-  },
-});
-const upload = multer({ storage });
 
 router.post(
   '/register',

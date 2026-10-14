@@ -27,7 +27,7 @@ export const createBooking = async (req, res) => {
     const geoRes = await axios.get(`https://api.opencagedata.com/geocode/v1/json`, {
       params: {
         q: `${departureCity}, Pakistan`,
-        key: process.env.OPENCAGE_API_KEY || "cccb5f5f8a92443a98d1cc24eb5b3a35",
+        key: process.env.OPENCAGE_API_KEY,
       },
     });
 

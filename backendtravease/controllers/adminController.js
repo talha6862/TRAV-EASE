@@ -5,15 +5,10 @@ import Destination from '../models/Destination.js';
 import TourOperator from '../models/tourOperatorModel.js'; 
 import Feedback from '../models/Feedback.js';
 
-import nodemailer from "nodemailer";
+import { webPath } from '../utils/multer.js';
+import transporter from '../utils/mailer.js';
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "talhaaslam6862@gmail.com",
-    pass: "rdtcqdlwnyshilcd",
-  },
-});
+
 
 
 export const getAllDealers = async (req, res) => {
@@ -124,35 +119,45 @@ export const getAllDestinations = async (req, res) => {
 
 export const addDestination = async (req, res) => {
   try {
-    console.log("📩 Body:", req.body);
-    console.log("📷 File:", req.file);
-
     const { name, description, price, distance, days, nights } = req.body;
-    const activities = JSON.parse(req.body.activities || "[]");
-    const touristSpots = JSON.parse(req.body.touristSpots || "[]");
-    const imagePath = req.file?.path;
 
-    if (!name || !description || !imagePath) {
-      return res.status(400).json({ message: "Required fields missing" });
+    // These arrive as JSON strings from the admin form. Tolerate a plain
+    // comma-separated string too, so a malformed value cannot throw a 500.
+    const parseList = (raw) => {
+      if (!raw) return [];
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch {
+        return String(raw).split(',').map((v) => v.trim()).filter(Boolean);
+      }
+    };
+
+    if (!name?.trim() || !description?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name and description are required',
+      });
     }
 
     const newDestination = new Destination({
-      name,
-      description,
-      image: imagePath,
-      price,
+      name: name.trim(),
+      description: description.trim(),
+      image: webPath(req.file),          // "uploads/<file>" or "" — image is optional
+      price: Number(price) || 0,
       distance,
-      days,
-      nights,
-      activities,
-      touristSpots,
+      days: Number(days) || 1,
+      nights: Number(nights) || 0,
+      activities: parseList(req.body.activities),
+      touristSpots: parseList(req.body.touristSpots),
     });
 
-    await newDestination.save();
-    res.status(201).json({ message: "Destination added" });
+    const saved = await newDestination.save();
+    res.status(201).json({ success: true, message: 'Destination added', destination: saved });
   } catch (error) {
-    console.error("❌ Failed to add destination:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error('Failed to add destination:', error);
+    // Send the real reason so the admin UI can show something actionable.
+    res.status(500).json({ success: false, message: error.message || 'Internal server error' });
   }
 };
 
@@ -200,8 +205,8 @@ export const updateDestination = async (req, res) => {
       touristSpots,
     };
 
-    if (req.file?.path) {
-      updatedData.image = req.file.path;
+    if (req.file) {
+      updatedData.image = webPath(req.file);
     }
 
     const result = await Destination.findByIdAndUpdate(id, updatedData, { new: true });
@@ -252,7 +257,7 @@ export const approveTourOperator = async (req, res) => {
     await operator.save();
 
     await transporter.sendMail({
-      from: "talhaaslam6862@gmail.com",
+      from: process.env.EMAIL_USER,
       to: operator.email,
       subject: "Your Tour Operator Account Has Been Verified",
       html: `

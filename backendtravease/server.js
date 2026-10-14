@@ -1,3 +1,4 @@
+import './loadEnv.js';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -15,15 +16,9 @@ import tourBookingRoutes from "./routes/tourBookingRoutes.js";
 import adminAuthRoutes from "./routes/adminAuth.js";
 import bookingRoutes from './routes/bookingRoutes.js';
 
-
-
-
-
-
-
-import dotenv from 'dotenv';
-dotenv.config();
-
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { UPLOAD_DIR } from './utils/multer.js';
 const app = express();
 const PORT = process.env.PORT || 8001;
 const mongoURI = process.env.MONGO_URI;
@@ -36,10 +31,13 @@ mongoose.set('strictQuery', true);
 
 const connect = async () => {
   try {
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI, {
+      serverSelectionTimeoutMS: 10000,   // fail fast with a clear message
+    });
     console.log('✅ MongoDB connected');
   } catch (error) {
     console.error('❌ MongoDB connection failed:', error.message);
+    console.error('   Check MONGO_URI in .env, your Atlas IP Access List, and the database user.');
   }
 };
 
@@ -48,7 +46,16 @@ const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000")
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(UPLOAD_DIR));
+
+app.get('/health', (req, res) => {
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  res.json({
+    status: 'ok',
+    database: states[mongoose.connection.readyState] || 'unknown',
+    uptime: Math.round(process.uptime()),
+  });
+});
 
 app.use('/user', userRoutes);
 app.use('/dealers', dealerRoutes);
@@ -64,10 +71,15 @@ app.use("/api/tour-bookings", tourBookingRoutes);
 app.use("/auth", adminAuthRoutes);
 app.use("/api/bookings", bookingRoutes);
 
-
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: `Route not found: ${req.method} ${req.originalUrl}` });
+});
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  if (err instanceof Error && /Only images|File too large/.test(err.message)) {
+    return res.status(400).json({ success: false, message: err.message });
+  }
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Something went wrong',
@@ -75,7 +87,9 @@ app.use((err, req, res, next) => {
   });
 });
 
+await connect();
+
 app.listen(PORT, () => {
-  connect();
   console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`   Allowed origins: ${allowedOrigins.join(', ')}`);
 });

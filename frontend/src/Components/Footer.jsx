@@ -54,13 +54,20 @@ export default function Footer() {
 
 
 const FooterContainer = styled.footer`
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* The footer's text is light, so the panel behind it has to be dark.
+     It was rgba(255,255,255,0.12), which over a light page rendered the
+     whole footer almost invisible. */
+  background: linear-gradient(145deg, rgba(6, 36, 43, 0.94), rgba(6, 36, 43, 0.86));
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
   padding: 4rem 2rem 2rem;
-  border-top: 2px solid rgba(219, 234, 254, 0.4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 -8px 32px rgba(6, 36, 43, 0.14);
   color: #e2e8f0;
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: #06242b;
+  }
 `;
 
 const TopSection = styled.div`

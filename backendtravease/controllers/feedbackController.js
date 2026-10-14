@@ -1,6 +1,5 @@
 import Feedback from "../models/Feedback.js";
-import nodemailer from "nodemailer";
-
+import transporter from '../utils/mailer.js';
 export const submitFeedback = async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -12,17 +11,11 @@ export const submitFeedback = async (req, res) => {
     const newFeedback = new Feedback({ name, email, message });
     await newFeedback.save();
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: 'talhaaslam6862@gmail.com',         
-        pass: 'rdtcqdlwnyshilcd',             
-      },
-    });
+    
 
     const mailOptions = {
       from: email,
-      to: 'talhaaslam6862@gmail.com',             
+      to: process.env.ADMIN_NOTIFY_EMAIL || process.env.EMAIL_USER,             
       subject: `📩 New Contact Message from ${name}`,
       text: `You received a message from:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
     };

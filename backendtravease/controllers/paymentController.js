@@ -1,7 +1,10 @@
 import Stripe from "stripe";
 import Payment from "../models/Payment.js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.warn("STRIPE_SECRET_KEY is not set — payment endpoints will return an error.");
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder");
 
 export const createPaymentIntent = async (req, res) => {
   try {

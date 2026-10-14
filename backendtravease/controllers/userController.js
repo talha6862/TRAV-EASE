@@ -1,7 +1,6 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcrypt';
-import nodemailer from 'nodemailer';
-
+import transporter from '../utils/mailer.js';
 export const registerUser = async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -25,16 +24,10 @@ export const registerUser = async (req, res) => {
     const newUser = new User({ firstName, lastName, email, password: hashed });
     await newUser.save();
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'talhaaslam6862@gmail.com',
-        pass: 'rdtcqdlwnyshilcd',
-      },
-    });
+    
 
     await transporter.sendMail({
-      from: 'talhaaslam6862@gmail.com',
+      from: process.env.EMAIL_USER,
       to: email,
       subject: 'Welcome to TravEase – Your Account is Ready',
       html: `

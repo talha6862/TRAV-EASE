@@ -1,8 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
-
+import transporter from '../utils/mailer.js';
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -51,18 +50,13 @@ export const forgotPassword = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, "resetSecretKey", { expiresIn: "15m" });
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "talhaaslam6862@gmail.com",
-        pass: "rdtcqdlwnyshilcd",
-      },
-    });
+    
 
-    const resetUrl = `http://localhost:3000/reset-password/${token}`;
+    const frontend = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',')[0].trim();
+    const resetUrl = `${frontend}/reset-password/${token}`;
 
     const mailOptions = {
-      from: "talhaaslam6862@gmail.com",
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "TravEase Password Reset",
       html: `

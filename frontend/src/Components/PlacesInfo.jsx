@@ -42,7 +42,7 @@ export default function PlacesInfo() {
   useEffect(() => {
   const calcDistance = async () => {
   if (!tour?.name || !departureCity) return;
-  const key = 'cccb5f5f8a92443a98d1cc24eb5b3a35';
+  const key = process.env.REACT_APP_OPENCAGE_KEY;
   const geo = async loc => {
     const r = await fetch(
       `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(loc)}, Pakistan&key=${key}`

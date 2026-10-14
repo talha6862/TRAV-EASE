@@ -1,4 +1,5 @@
 import Dealer from '../models/Dealer.js';
+import { webPath } from '../utils/multer.js';
 
 export const registerDealer = async (req, res) => {
   try {
@@ -16,8 +17,8 @@ export const registerDealer = async (req, res) => {
       maxPrice,
     } = req.body;
 
-    const licenseImage = req.files?.licenseImage?.[0]?.path || '';
-    const dealershipCertificate = req.files?.dealershipCertificate?.[0]?.path || '';
+    const licenseImage = webPath(req.files?.licenseImage?.[0]);
+    const dealershipCertificate = webPath(req.files?.dealershipCertificate?.[0]);
 
     const newDealer = new Dealer({
       dealerName,
